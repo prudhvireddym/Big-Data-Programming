@@ -1,0 +1,24 @@
+create table olympic(athelete STRING,age INT,country STRING,year STRING,closing STRING,sport STRING,gold INT,silver INT,bronze INT,total INT) 
+row format delimited fields terminated by ‘\t’ lines terminated by '\n'
+stored as textfile;
+
+hive> create table olympic(athelete STRING,age INT,country STRING,year STRING,closing STRING,sport STRING,gold INT,silver INT,bronze INT,total INT)
+    > row format delimited fields terminated by '\t' lines terminated by '\n'
+    > stored as textfile;
+
+load data local inpath '/home/cloudera/Documents/icp4/hive/olympic_data.csv' into table olympic;
+
+Question1:
+select country,SUM(total) from olympic where sport = "Swimming" GROUP BY country;
+
+Question2
+select year,SUM(total) from olympic where country = "India" GROUP BY year;
+
+Question3
+select country,SUM(total) from olympic GROUP BY country;
+
+Question4
+select country,SUM(gold) from olympic GROUP BY country;
+
+Question5
+select country,year,SUM(total) from olympic where sport = "Shooting" GROUP BY year,country order by country;

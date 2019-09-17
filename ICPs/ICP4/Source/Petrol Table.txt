@@ -1,0 +1,18 @@
+create table petrol (distributer_id STRING,distributer_name STRING,amt_IN STRING,amy_OUT STRING,vol_IN INT,vol_OUT INT,year INT)
+    > row format delimited fields terminated by ',' lines terminated by '\n'
+    > stored as textfile;
+
+	
+	
+hive> load data local inpath '/home/cloudera/Documents/icp4/hive/petrol.txt' into table petrol;
+
+SELECT distributer_name,SUM(vol_OUT)  FROM  petrol GROUP  BY distributer_name;
+
+SELECT distributer_id,vol_OUT FROM petrol order by vol_OUT desc limit 10;
+
+SELECT distributer_id,vol_OUT FROM petrol order by vol_OUT asc limit 10;
+
+select distributer_name from petrol group by distributer_name
+    > having (sum(vol_IN) - sum(vol_OUT)) > 50;
+
+select distributer_id,distributer_name,year from petrol where (vol_IN - vol_OUT) > 50;

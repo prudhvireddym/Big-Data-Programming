@@ -1,0 +1,48 @@
+Movie Data:
+==================================================================================================
+Question1:
+
+Create 3 tables called movies, ratings and users. Load the data into tables.
+==================================================================================================
+create table movies (movie_id INT,title STRING,genres STRING)
+row format delimited fields terminated by ',' lines terminated by '\n'
+stored as textfile;
+
+load data local inpath '/home/cloudera/Documents/icp4/hive/movie/movies.csv' into table movies;
+
+select movie_id,title,genres from movies where genres like '%Action%';
+
+==================================================================================================
+
+create table ratings (user_id INT,movie_id INT,rating FLOAT,time_stamp TIMESTAMP)
+row format delimited fields terminated by ',' lines terminated by '\n'
+stored as textfile;
+
+load data local inpath '/home/cloudera/Documents/icp4/hive/movie/ratings.csv' into table ratings;
+
+select user_id,movie_id from ratings where rating = 5.0;
+
+==================================================================================================
+
+create table users (user_id INT,gender STRING,age INT,occupation INT,zip_code INT)
+row format delimited fields terminated by ',' lines terminated by '\n'
+stored as textfile;
+
+load data local inpath '/home/cloudera/Documents/icp4/hive/movie/users.txt' into table users;
+
+select user_id,gender from users where age > 15;
+
+==================================================================================================
+Question2:
+
+select movie_id,title,genres from movies where genres like '%Action%' and genres like '%Drama%';
+==================================================================================================
+Question3:
+
+select movie_id from ratings where rating=5.0;
+==================================================================================================
+Question4:
+select movies.movie_id,avg(ratings.rating) avg_rating,movies.title from movies
+JOIN ratings ON(movies.movie_id = ratings.movie_id AND movies.genres like '%Action%')
+GROUP BY movies.movie_id, movies.title
+order by avg_rating desc limit 11;
