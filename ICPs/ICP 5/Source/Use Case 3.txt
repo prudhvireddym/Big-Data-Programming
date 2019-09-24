@@ -1,0 +1,60 @@
+CREATE TABLE IF NOT EXISTS STOCKS_PRICES (
+  stock_date DATE,
+  stock_price_open FLOAT,
+  stock_price_high FLOAT,
+  stock_price_low FLOAT,
+  stock_price_close FLOAT,
+  stock_volume FLOAT,
+  stock_price_adj_close FLOAT
+)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+SHOW TABLES;
+
+LOAD DATA LOCAL INPATH '' INTO TABLE STOCKS_PRICES;
+LOAD DATA LOCAL INPATH '/home/cloudera/Documents/workspaces/icp5/thinkbig-hive-tutorial/data/stocks/input/plain-text/NASDAQ/INTC/' INTO TABLE STOCKS_PRICES;
+LOAD DATA LOCAL INPATH '/home/cloudera/Documents/workspaces/icp5/thinkbig-hive-tutorial/data/stocks/input/plain-text/NYSE/GE/' INTO TABLE STOCKS_PRICES;
+LOAD DATA LOCAL INPATH '/home/cloudera/Documents/workspaces/icp5/thinkbig-hive-tutorial/data/stocks/input/plain-text/NYSE/IBM/' INTO TABLE STOCKS_PRICES;
+
+SELECT * FROM STOCKS_PRICES;
+DESCRIBE STOCKS_PRICES;
+DESCRIBE EXTENDED STOCKS_PRICES;
+
+
+HIVE TO SQL
+
+sqoop export --connect jdbc:mysql://localhost/db5 --username root --password cloudera --table myemp --export-dir /user/hive/warehouse/stocks_prices -m 1;
+
+
+Pattern Matching
+
+SELECT REGEXP_EXTRACT(line, "(.*) (.*)", 2) FROM FILES;
+
+
+Word Count
+
+drop table IF EXISTS FILES;
+
+create table FILES(line STRING);
+
+SHOW TABLES;
+
+LOAD DATA LOCAL INPATH '/home/cloudera/Documents/workspaces/icp5/thinkbig-hive-tutorial/data/shakespeare/input/' INTO TABLE FILES;
+
+CREATE TABLE word_counts AS
+SELECT word, count(1) AS count FROM
+(SELECT explode(split(line, ' ')) AS word FROM FILES) w
+GROUP BY word
+ORDER BY word;
+
+SELECT * FROM word_counts;
+
+COMPUTE STATISTICS
+
+ANALYZE TABLE stocks_prices COMPUTE STATISTICS;
+DESCRIBE EXTENDED stocks_prices;
+
+
