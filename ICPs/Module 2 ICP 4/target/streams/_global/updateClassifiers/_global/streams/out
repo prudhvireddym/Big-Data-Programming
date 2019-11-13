@@ -1,0 +1,4 @@
+[debug] "not up to date. inChanged = true, force = false
+[debug] Updating ProjectRef(uri("file:/C:/Users/prudh/Downloads/ICP%204/"), "icp-4")...
+[debug] Done updating ProjectRef(uri("file:/C:/Users/prudh/Downloads/ICP%204/"), "icp-4")
+[warn] There may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.

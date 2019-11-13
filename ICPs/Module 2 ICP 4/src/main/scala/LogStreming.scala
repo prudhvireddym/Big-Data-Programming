@@ -1,0 +1,20 @@
+import org.apache.spark.SparkConf
+import org.apache.spark.streaming.{Seconds, StreamingContext}
+
+object LogStreming {
+
+  def main(args: Array[String]): Unit = {
+    System.setProperty("hadoop.home.dir", "C:\\winutils")
+    val conf = new SparkConf().setMaster("local[2]").setAppName("log_file_Streaming")
+    val ssc = new StreamingContext(conf, Seconds(10))
+    val lines = ssc.textFileStream("log")
+    val words = lines.flatMap(_.split(" "))
+    val pairs = words.map(word => (word, 1))
+    val wordCounts = pairs.reduceByKey(_ + _)
+
+    wordCounts.print()
+    ssc.start()
+    ssc.awaitTermination()
+  }
+
+}
